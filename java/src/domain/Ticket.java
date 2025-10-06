@@ -1,5 +1,8 @@
 package domain;
 
+
+import java.time.LocalDateTime;
+
 public class Ticket {
     private int id;
     private String title;
@@ -12,8 +15,20 @@ public class Ticket {
     private String stateName;
     private String reporterUsername;
     private String assigneeUsername;
-
+    private LocalDateTime createdAt;
+  
+    //Constructor vacio para la creacion de tickets
     public Ticket() {}
+  
+    public Ticket(String title, String description, int reporterId, int categoryId, int stateId) {
+      this.title = title;
+      this.description = description;
+      this.reporterId = reporterId;
+      this.categoryId = categoryId;
+      this.stateId = stateId;
+      this.createdAt = LocalDateTime.now();
+}
+
 
     // Setters y Getters
     public int getId() {
@@ -103,19 +118,25 @@ public class Ticket {
     public void setAssigneeUsername(String assigneeUsername) {
         this.assigneeUsername = assigneeUsername;
     }
+  
+    public LocalDateTime getCreatedAt() { return createdAt; }
+    public void setCreatedAt(LocalDateTime createdAt) { this.createdAt = createdAt; }
 
-    @Override
-    public String toString() {
-        return "Ticket{" +
-                "id=" + id +
-                ", title='" + title + '\'' +
-                ", description='" + description + '\'' +
-                ", reporterId=" + reporterId +
-                ", assigneeId=" + assigneeId +
-                ", categoryId=" + categoryId +
-                ", categoryName='" + categoryName + '\'' +
-                ", stateId=" + stateId +
-                ", stateName='" + stateName + '\'' +
-                '}';
+ @Override
+public String toString() {
+    return "Ticket{" +
+            "id=" + id +
+            ", title='" + title + '\'' +
+            ", description='" + description + '\'' +
+            ", reporterId=" + reporterId +
+            ", reporterUsername='" + reporterUsername + '\'' +
+            ", assigneeId=" + (assigneeId != null ? assigneeId : "N/A") +
+            ", assigneeUsername='" + assigneeUsername + '\'' +
+            ", categoryId=" + categoryId +
+            ", categoryName='" + categoryName + '\'' +
+            ", stateId=" + stateId +
+            ", stateName='" + stateName + '\'' +
+            ", createdAt=" + createdAt +
+            '}';
     }
 }
