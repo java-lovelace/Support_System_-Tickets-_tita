@@ -1,6 +1,8 @@
+import app.MenuUser;
+
 public class Main {
     public static void main(String[] args) {
-        Menu menu = new Menu();
+        MenuUser menu = new MenuUser();
         menu.mostrarMenu();
     }
 }

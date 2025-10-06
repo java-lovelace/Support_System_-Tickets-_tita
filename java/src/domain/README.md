@@ -35,10 +35,10 @@ El proyecto sigue una arquitectura por capas bien definida para separar responsa
 
 1.  **Capa de Presentación (UI):**
     * `Main.java`: Punto de entrada de la aplicación. Su única responsabilidad es instanciar y lanzar el menú.
-    * `Menu.java`: Gestiona el bucle del menú principal y la interacción directa con el usuario a través de `JOptionPane`. Delega todas las acciones al controlador.
+    * `app.MenuUser.java`: Gestiona el bucle del menú principal y la interacción directa con el usuario a través de `JOptionPane`. Delega todas las acciones al controlador.
 
 2.  **Capa de Controlador:**
-    * `controller.MenuController.java`: Actúa como el cerebro de la aplicación. Recibe las peticiones del `Menu`, procesa la lógica de negocio (como pedir datos al usuario) y se comunica con la capa de datos (DAO) para persistir o recuperar información.
+    * `controller.MenuController.java`: Actúa como el cerebro de la aplicación. Recibe las peticiones del `app.MenuUser`, procesa la lógica de negocio (como pedir datos al usuario) y se comunica con la capa de datos (DAO) para persistir o recuperar información.
 
 3.  **Capa de Acceso a Datos (DAO):**
     * `dao.UsuarioDao.java`: Es la **interfaz** que define el contrato de las operaciones de base de datos para los usuarios. Esto desacopla el controlador de la implementación específica.

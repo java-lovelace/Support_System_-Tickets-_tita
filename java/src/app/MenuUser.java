@@ -1,10 +1,12 @@
+package app;
+
 import controller.MenuController;
 import dao.UsuarioDao;
 import dao.UsuarioDaoJDBC;
 import javax.swing.JOptionPane;
 
 
-public class Menu {
+public class MenuUser {
     private final UsuarioDao usuarioDao = new UsuarioDaoJDBC();
     private final MenuController menuController = new MenuController(usuarioDao);
 
