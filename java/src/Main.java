@@ -1,7 +1,7 @@
 import java.sql.Connection;
 import java.sql.SQLException;
 import config.ConnectionFactory;
-import view.MenuTicket;
+import view.UserMenu;
 
 public class Main {
     public static void main(String[] args) {
@@ -16,7 +16,10 @@ public class Main {
         }
 
         // Iniciar menú principal
-        MenuTicket menuTicket = new MenuTicket();
-        menuTicket.start();
+        // MenuTicket menuTicket = new MenuTicket();
+        // menuTicket.start();
+
+        UserMenu userMenu = new UserMenu();
+        userMenu.showMenu();
     }
 }
