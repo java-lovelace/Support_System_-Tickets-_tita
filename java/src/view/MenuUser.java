@@ -1,4 +1,4 @@
-package app;
+package view;
 
 import controller.MenuController;
 import dao.UsuarioDao;

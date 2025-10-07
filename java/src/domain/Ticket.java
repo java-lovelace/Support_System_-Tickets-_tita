@@ -8,7 +8,7 @@ public class Ticket {
     private String title;
     private String description;
     private int reporterId;
-    private int assigneeId;
+    private Integer assigneeId;
     private int categoryId;
     private int stateId;
     private String categoryName;
