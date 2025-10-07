@@ -6,7 +6,7 @@ import util.InputValidator;
 import javax.swing.*;
 import java.util.List;
 
-public class Menu {
+public class MenuTicket {
     private final TicketController ticketController = new TicketController();
 
     public void start() {
@@ -14,15 +14,18 @@ public class Menu {
         do {
             String input = JOptionPane.showInputDialog(null,
                     """
-                            === Ticket System ===
-                            1. Create Ticket (using names)
-                            2. List all tickets
-                            3. Search tickets by state and category
-                            4. List tickets by assignee (with reporter and category)
-                            5. Top 3 categories with the most tickets
-                            6. Show available categories, states and users
-                            0. Go out
-                            """,
+                             === Ticket System ===
+                             1. Create Ticket (using names)
+                             2. List all tickets
+                             3. Search tickets by state and category
+                             4. List tickets by assignee (with reporter and category)
+                             5. Top 3 categories with the most tickets
+                             6. Show available categories, states and users
+                             7. Change ticket state
+                             8. Assign ticket
+                             9. Add comment to ticket
+                             0. Go out
+                             """,
                     "Main Menu", JOptionPane.QUESTION_MESSAGE);
 
 
@@ -45,6 +48,10 @@ public class Menu {
                 case 4 -> listByAssignee();
                 case 5 -> topCategories();
                 case 6 -> showAvailableNames();
+                case 7 -> changeTicketState();
+                case 8 -> assignTicket();
+                case 9 -> addCommentToTicket();
+
                 case 0 -> {
                     JOptionPane.showMessageDialog(null, "Going out...");
                     return;
@@ -179,6 +186,44 @@ public class Menu {
 
         JOptionPane.showMessageDialog(null, sb.toString(), "Available Names", JOptionPane.INFORMATION_MESSAGE);
     }
+
+    // Cambiar estado de un ticket
+    private void changeTicketState() {
+        try {
+            int id = Integer.parseInt(JOptionPane.showInputDialog("Enter ticket ID:"));
+            String newState = JOptionPane.showInputDialog("Enter the new state name:");
+            ticketController.changeState(id, newState);
+            JOptionPane.showMessageDialog(null, "Ticket state updated successfully!");
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(null, "Error: " + e.getMessage());
+        }
+    }
+
+    // Asignar ticket a otro usuario
+    private void assignTicket() {
+        try {
+            int id = Integer.parseInt(JOptionPane.showInputDialog("Enter ticket ID:"));
+            String newUser = JOptionPane.showInputDialog("Enter the new assignee username:");
+            ticketController.assignTicket(id, newUser);
+            JOptionPane.showMessageDialog(null, "Ticket reassigned successfully!");
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(null, "Error: " + e.getMessage());
+        }
+    }
+
+    // Agregar comentario a un ticket
+    private void addCommentToTicket() {
+        try {
+            int id = Integer.parseInt(JOptionPane.showInputDialog("Enter ticket ID:"));
+            String author = JOptionPane.showInputDialog("Enter your username:");
+            String content = JOptionPane.showInputDialog("Enter the comment:");
+            ticketController.addComment(id, author, content);
+            JOptionPane.showMessageDialog(null, "Comment added successfully!");
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(null, "Error: " + e.getMessage());
+        }
+    }
+
 
 
 }

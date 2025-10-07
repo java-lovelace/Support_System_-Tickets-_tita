@@ -1,6 +1,7 @@
 package service;
 
-import dao.TicketDAO;
+import dao.TicketDao;
+import dao.TicketDaoJDBC;
 import domain.Ticket;
 import dao.CommentDao;
 import domain.Comentario;
@@ -8,7 +9,7 @@ import java.util.List;
 import java.util.Map;
 
 public class TicketService {
-    private final TicketDAO ticketDAO = new TicketDAO();
+    private TicketDao ticketDao = new TicketDaoJDBC();
     private final CommentDao commentDao;
     private static final int ESTADO_INICIAL = 1;
   
@@ -22,11 +23,11 @@ public class TicketService {
         if (ticket == null) throw new IllegalArgumentException("ticket is null");
         if (ticket.getTitle() == null || ticket.getTitle().isBlank())
             throw new IllegalArgumentException("title required");
-        ticketDAO.save(ticket);
+        ticketDao.save(ticket);
     }
 
     public List<Ticket> getAllTickets() {
-        return ticketDAO.findAll();
+        return ticketDao.findAll();
     }
 
     // Buscar por estado y categoria
@@ -34,20 +35,20 @@ public class TicketService {
         if (stateName == null || stateName.trim().isEmpty() || categoryName == null || categoryName.trim().isEmpty()) {
             throw new IllegalArgumentException("required status and category");
         }
-        return ticketDAO.listByStateAndCategory(stateName, categoryName);
+        return ticketDao.listByStateAndCategory(stateName, categoryName);
     }
 
     // Buscar por asignacion
     public List<Ticket> findByAssignee(String assigneeUsername) {
         if (assigneeUsername == null || assigneeUsername.isBlank())
             throw new IllegalArgumentException("assignee required");
-        return ticketDAO.listByAssignee(assigneeUsername);
+        return ticketDao.listByAssignee(assigneeUsername);
     }
 
     // Traer el top 3 de categorias
     public Map<String, Integer> getTopCategories(int limit) {
         if (limit <= 0) limit = 3;
-        return ticketDAO.topCategories(limit);
+        return ticketDao.topCategories(limit);
     }
 
     // Crear ticket por nombre
@@ -62,31 +63,31 @@ public class TicketService {
         Ticket ticket = new Ticket();
         ticket.setTitle(title);
         ticket.setDescription(description);
-        ticket.setReporterId(ticketDAO.findUserIdByUsername(reporterUsername));
+        ticket.setReporterId(ticketDao.findUserIdByUsername(reporterUsername));
 
         if (assigneeUsername != null && !assigneeUsername.isBlank()) {
-            ticket.setAssigneeId(ticketDAO.findUserIdByUsername(assigneeUsername));
+            ticket.setAssigneeId(ticketDao.findUserIdByUsername(assigneeUsername));
         }
 
-        ticket.setCategoryId(ticketDAO.findCategoryIdByName(categoryName));
-        ticket.setStateId(ticketDAO.findStateIdByName(stateName));
+        ticket.setCategoryId(ticketDao.findCategoryIdByName(categoryName));
+        ticket.setStateId(ticketDao.findStateIdByName(stateName));
 
-        ticketDAO.save(ticket);
+        ticketDao.save(ticket);
     }
 
     // Traer todas las categorias
     public List<String> getAllCategories() {
-        return ticketDAO.listAllCategories();
+        return ticketDao.listAllCategories();
     }
 
     // Traer toos los estados
     public List<String> getAllStates() {
-        return ticketDAO.listAllStates();
+        return ticketDao.listAllStates();
     }
 
     //Traer todos los usernames
     public List<String> getAllUsernames() {
-        return ticketDAO.listAllUsernames();
+        return ticketDao.listAllUsernames();
     }
   
     //H5: Asigna un ticket, validando que el assignee exista y tenga el rol correcto.
@@ -142,6 +143,26 @@ public class TicketService {
         Comentario comentario = new Comentario(ticketId, userId, text);
         commentDao.addComment(comentario);
         System.out.println("Comentario agregado al ticket " + ticketId);
+    }
+
+    // Obtener el ID real de un usuario por su username
+    public java.util.Optional<Integer> getUserIdByUsername(String username) {
+        try {
+            int id = ticketDao.findUserIdByUsername(username);
+            return java.util.Optional.of(id);
+        } catch (Exception e) {
+            return java.util.Optional.empty();
+        }
+    }
+
+    // Obtener el ID real de un estado por su nombre
+    public java.util.Optional<Integer> getStateIdByName(String stateName) {
+        try {
+            int id = ticketDao.findStateIdByName(stateName);
+            return java.util.Optional.of(id);
+        } catch (Exception e) {
+            return java.util.Optional.empty();
+        }
     }
 
 
