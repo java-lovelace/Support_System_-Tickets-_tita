@@ -11,7 +11,7 @@ import java.util.Properties;
 public class ConnectionFactory {
 
     // CAMBIO IMPORTANTE: Esta es una ruta directa relativa a la raíz de tu proyecto.
-    private static final String PROPERTIES_FILE_PATH = "src/resources/db.properties";
+    private static final String PROPERTIES_FILE_PATH = "src/config/db.properties";
     private static final Properties properties = new Properties();
 
     static {

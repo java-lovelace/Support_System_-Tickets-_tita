@@ -15,11 +15,11 @@ public class TicketService {
     private final CommentDao commentDao;
     private final UsuarioDao usuarioDao;
     private static final int ESTADO_INICIAL = 1;
-  
-     public TicketService(TicketDao ticketDao, CommentDao commentDao) {
-      this.ticketDao = ticketDao;
-      this.commentDao = commentDao;
-      this.usuarioDao = new UsuarioDaoJDBC();
+
+    public TicketService(TicketDao ticketDao, CommentDao commentDao) {
+        this.ticketDao = ticketDao;
+        this.commentDao = commentDao;
+        this.usuarioDao = new UserDaoJDBC();
     }
 
     // Crear ticket
@@ -93,7 +93,7 @@ public class TicketService {
     public List<String> getAllUsernames() {
         return ticketDao.listAllUsernames();
     }
-  
+
     //H5: Asigna un ticket, validando que el assignee exista y tenga el rol correcto.
     public boolean assignTicket(int ticketId, int assigneeId) {
         if (ticketDao.findById(ticketId).isEmpty()) {
@@ -113,7 +113,7 @@ public class TicketService {
     }
 
 
-   //H5: Cambia el estado de un ticket, validando la secuencia de transición.
+    //H5: Cambia el estado de un ticket, validando la secuencia de transición.
     public boolean changeState(int ticketId, int newStateId) {
         return ticketDao.findById(ticketId).map(ticket -> {
             int currentStateId = ticket.getStateId();
