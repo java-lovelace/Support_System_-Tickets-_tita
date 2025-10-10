@@ -1,21 +1,25 @@
 package service;
 
-import dao.TicketDao;
-import dao.TicketDaoJDBC;
+import dao.*;
+import domain.Role;
 import domain.Ticket;
-import dao.CommentDao;
 import domain.Comentario;
+import domain.Usuario;
+
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 public class TicketService {
     private TicketDao ticketDao = new TicketDaoJDBC();
     private final CommentDao commentDao;
+    private final UsuarioDao usuarioDao;
     private static final int ESTADO_INICIAL = 1;
   
      public TicketService(TicketDao ticketDao, CommentDao commentDao) {
       this.ticketDao = ticketDao;
       this.commentDao = commentDao;
+      this.usuarioDao = new UsuarioDaoJDBC();
     }
 
     // Crear ticket
@@ -97,6 +101,12 @@ public class TicketService {
             return false;
         }
 
+        Usuario assignee = usuarioDao.findById(assigneeId);
+        if (assignee == null || assignee.getRole() != Role.ASSIGNEE){
+            System.err.println("Error: El ususario " + assigneeId + "No existe o no tiene el rol 'ASSIGNEE'. ");
+            return false;
+        }
+
         ticketDao.assign(ticketId, assigneeId);
         System.out.println("Ticket " + ticketId + " asignado a usuario " + assigneeId);
         return true;
@@ -146,7 +156,7 @@ public class TicketService {
     }
 
     // Obtener el ID real de un usuario por su username
-    public java.util.Optional<Integer> getUserIdByUsername(String username) {
+    public Optional<Integer> getUserIdByUsername(String username) {
         try {
             int id = ticketDao.findUserIdByUsername(username);
             return java.util.Optional.of(id);
@@ -156,7 +166,7 @@ public class TicketService {
     }
 
     // Obtener el ID real de un estado por su nombre
-    public java.util.Optional<Integer> getStateIdByName(String stateName) {
+    public Optional<Integer> getStateIdByName(String stateName) {
         try {
             int id = ticketDao.findStateIdByName(stateName);
             return java.util.Optional.of(id);

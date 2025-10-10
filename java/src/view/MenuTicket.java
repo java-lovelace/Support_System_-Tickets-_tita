@@ -214,11 +214,30 @@ public class MenuTicket {
     // Agregar comentario a un ticket
     private void addCommentToTicket() {
         try {
-            int id = Integer.parseInt(JOptionPane.showInputDialog("Enter ticket ID:"));
+            String idStr = JOptionPane.showInputDialog("Enter ticket ID:");
+            if (!InputValidator.isNumeric(idStr)) {
+                JOptionPane.showMessageDialog(null, "ID de ticket no válido.");
+                return;
+            }
+            int id = Integer.parseInt(idStr);
+
             String author = JOptionPane.showInputDialog("Enter your username:");
+            // CORRECCIÓN: Usamos trim() para eliminar espacios al inicio y al final.
+            if (!InputValidator.isValid(author)) {
+                JOptionPane.showMessageDialog(null, "El nombre de autor no puede estar vacío.");
+                return;
+            }
+
             String content = JOptionPane.showInputDialog("Enter the comment:");
-            ticketController.addComment(id, author, content);
+            if (!InputValidator.isValid(content)) {
+                JOptionPane.showMessageDialog(null, "El comentario no puede estar vacío.");
+                return;
+            }
+
+            // Enviamos el nombre de autor ya "limpio"
+            ticketController.addComment(id, author.trim(), content);
             JOptionPane.showMessageDialog(null, "Comment added successfully!");
+
         } catch (Exception e) {
             JOptionPane.showMessageDialog(null, "Error: " + e.getMessage());
         }

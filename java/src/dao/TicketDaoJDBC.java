@@ -216,19 +216,20 @@ public class TicketDaoJDBC implements TicketDao {
     public List<Ticket> listByAssignee(String assigneeUsername) {
         List<Ticket> tickets = new ArrayList<>();
         String sql = """
-                SELECT t.id, t.title, t.description,
-                       r.username AS reporter,
-                       a.username AS assignee,
-                       c.name AS category,
-                       s.name AS state
-                FROM tickets t
-                JOIN users r ON t.reporter_id = r.id
-                LEFT JOIN users a ON t.assignee_id = a.id
-                JOIN categories c ON t.category_id = c.id
-                JOIN states s ON t.state_id = s.id
-                WHERE a.username = ?
-                ORDER BY t.created_at DESC
-                """;
+            SELECT t.id, t.title, t.description,
+                   t.reporter_id, t.assignee_id, t.category_id, t.state_id,
+                   r.username AS reporter,
+                   a.username AS assignee,
+                   c.name AS category,
+                   s.name AS state
+            FROM tickets t
+            JOIN users r ON t.reporter_id = r.id
+            LEFT JOIN users a ON t.assignee_id = a.id
+            JOIN categories c ON t.category_id = c.id
+            JOIN states s ON t.state_id = s.id
+            WHERE a.username = ?
+            ORDER BY t.created_at DESC
+            """;
 
         try (Connection conn = ConnectionFactory.getConnection();
              PreparedStatement ps = conn.prepareStatement(sql)) {
@@ -241,6 +242,7 @@ public class TicketDaoJDBC implements TicketDao {
                     t.setId(rs.getInt("id"));
                     t.setTitle(rs.getString("title"));
                     t.setDescription(rs.getString("description"));
+                    // Ahora estas líneas funcionarán sin error
                     t.setReporterId(rs.getInt("reporter_id"));
                     t.setAssigneeId(rs.getInt("assignee_id"));
                     t.setCategoryId(rs.getInt("category_id"));
@@ -323,7 +325,7 @@ public class TicketDaoJDBC implements TicketDao {
 
     @Override
     public int findUserIdByUsername(String username) {
-        String sql = "SELECT id FROM users WHERE username = ?";
+        String sql = "SELECT id FROM users WHERE LOWER(username) = LOWER(?)";
         try (Connection conn = ConnectionFactory.getConnection();
              PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setString(1, username);

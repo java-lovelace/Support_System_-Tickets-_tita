@@ -51,11 +51,11 @@ public class Usuario {
 
     @Override
     public String toString() {
-        return "Usuario" + '\n' +
-                "id:" + id + '\n' +
-                ", username='" + username + '\'' +
-                ", role=" + role + '\n' +
-                ", createdAt=" + createdAt
+        return "--- Usuario ---  " + '\n' +
+                "Id:" + id + '\n' +
+                "Username:" + username + '\n' +
+                "Role:" + role + '\n' +
+                "CreatedAt:" + createdAt
                 ;
     }
 }

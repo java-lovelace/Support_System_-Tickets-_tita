@@ -8,6 +8,7 @@ import domain.Ticket;
 import service.TicketService;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 public class TicketController {
     private final TicketService ticketService;
@@ -58,36 +59,36 @@ public class TicketController {
 
     // Cambiar el estado del ticket usando el nombre del estado
     public void changeState(int ticketId, String newStateName) {
-        int newStateId = ticketService.getAllStates().stream()
-                .filter(name -> name.equalsIgnoreCase(newStateName))
-                .findFirst()
-                .map(name -> ticketService.getAllStates().indexOf(name) + 1)
-                .orElseThrow(() -> new IllegalArgumentException("Estado no encontrado: " + newStateName));
+        Optional<Integer> newStateIdOpt = ticketService.getStateIdByName(newStateName);
 
-        boolean success = ticketService.changeState(ticketId, newStateId);
-        if (!success) throw new IllegalStateException("Cambio de estado no permitido");
+        if (newStateIdOpt.isEmpty()){
+            throw new IllegalStateException("Estado no encontrado" + newStateName);
+        }
+
+        boolean success = ticketService.changeState(ticketId, newStateIdOpt.get());
+        if (!success) {
+            throw new IllegalStateException("Cambio de estado no permitido o ticket no encontrado");
+        }
     }
 
     // Reasignar un ticket a otro usuario usando el nombre
     public void assignTicket(int ticketId, String assigneeUsername) {
-        int assigneeId = ticketService.getAllUsernames().stream()
-                .filter(name -> name.equalsIgnoreCase(assigneeUsername))
-                .findFirst()
-                .map(name -> ticketService.getAllUsernames().indexOf(name) + 1)
-                .orElseThrow(() -> new IllegalArgumentException("Usuario no encontrado: " + assigneeUsername));
+        Optional<Integer> assigneeIdOpt = ticketService.getStateIdByName(assigneeUsername);
 
-        boolean success = ticketService.assignTicket(ticketId, assigneeId);
-        if (!success) throw new IllegalStateException("No se pudo reasignar el ticket");
+        if (assigneeIdOpt.isEmpty()){
+            throw new IllegalStateException("Usuario no encontrado: " + assigneeUsername);
+        }
+        boolean success = ticketService.assignTicket(ticketId, assigneeIdOpt.get());
+        if (!success) throw new IllegalStateException("No se pudo reasignar el ticket. Verifique le rol del usuario");
     }
 
     // Agregar comentario usando el nombre del usuario
     public void addComment(int ticketId, String username, String text) {
-        int userId = ticketService.getAllUsernames().stream()
-                .filter(name -> name.equalsIgnoreCase(username))
-                .findFirst()
-                .map(name -> ticketService.getAllUsernames().indexOf(name) + 1)
-                .orElseThrow(() -> new IllegalArgumentException("Usuario no encontrado: " + username));
+        Optional<Integer> userIdOpt = ticketService.getUserIdByUsername(username);
 
-        ticketService.addComment(ticketId, userId, text);
+        if(userIdOpt.isEmpty()){
+            throw new IllegalStateException("Usuario no encontrado " + username);
+        }
+        ticketService.addComment(ticketId, userIdOpt.get(), text);
     }
 }

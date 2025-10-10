@@ -124,19 +124,14 @@ public class Ticket {
 
  @Override
 public String toString() {
-    return "Ticket{" +
-            "id=" + id +
-            ", title='" + title + '\'' +
-            ", description='" + description + '\'' +
-            ", reporterId=" + reporterId +
-            ", reporterUsername='" + reporterUsername + '\'' +
-            ", assigneeId=" + (assigneeId != null ? assigneeId : "N/A") +
-            ", assigneeUsername='" + assigneeUsername + '\'' +
-            ", categoryId=" + categoryId +
-            ", categoryName='" + categoryName + '\'' +
-            ", stateId=" + stateId +
-            ", stateName='" + stateName + '\'' +
-            ", createdAt=" + createdAt +
-            '}';
+    return "  --- Ticket ---" + '\n' +
+            "Id: " + id + '\n' +
+            " Title: " + title + '\n' +
+            " Description: " + description + '\n' +
+            " Repot-Usernam: " + reporterUsername + '\n' +
+            " Assig-Username: " + assigneeUsername + '\n' +
+            " CategoryName: " + categoryName + '\n' +
+            " StateName: " + stateName + '\n' +
+            " CreatedAt: " + createdAt ;
     }
 }
